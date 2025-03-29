@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: ${DB_NAME}
+    env_file:
+      - ./.env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - ./db_data/data:/var/lib/postgres/data
+    networks:
+      - social_network_network
+
+  nginx:
+    image: nginx:latest
+    networks:
+      - social_network_network
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/social_network:/etc/nginx/conf.d/social_network
+
+volumes:
+  db_data/data:
+  nginx/social_network:
+
+networks:
+  social_network_network:
+    driver: bridge
+
+

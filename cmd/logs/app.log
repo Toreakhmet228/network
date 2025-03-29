@@ -1,0 +1,4 @@
+{"level":"FATAL","timestamp":"2025-03-29T00:37:50.245+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open .env: no such file or directory"}
+{"level":"FATAL","timestamp":"2025-03-29T00:38:15.896+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open /chat/.env: no such file or directory"}
+{"level":"FATAL","timestamp":"2025-03-29T00:38:36.251+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open chat/.env: no such file or directory"}
+{"level":"FATAL","timestamp":"2025-03-29T00:39:50.212+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open ../../.env: no such file or directory"}
