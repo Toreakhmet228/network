@@ -1,0 +1,29 @@
+{"level":"INFO","timestamp":"2025-03-30T10:09:16.776+0500","caller":"api/server.go:59","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T10:09:16.776+0500","caller":"api/server.go:44","message":"gRPC сервер запущен на :50010"}
+{"level":"INFO","timestamp":"2025-03-30T10:16:05.704+0500","caller":"api/server.go:73","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T10:16:05.705+0500","caller":"api/server.go:58","message":"gRPC сервер запущен на :50010"}
+{"level":"INFO","timestamp":"2025-03-30T10:18:10.652+0500","caller":"api/server.go:74","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T10:18:10.653+0500","caller":"api/server.go:59","message":"gRPC сервер запущен на :50010"}
+{"level":"ERROR","timestamp":"2025-03-30T10:18:53.433+0500","caller":"api/server.go:37","message":"Ошибка при создании пользователя","error":"ERROR: duplicate key value violates unique constraint \"uni_users_email\" (SQLSTATE 23505)"}
+{"level":"ERROR","timestamp":"2025-03-30T10:18:59.641+0500","caller":"api/server.go:37","message":"Ошибка при создании пользователя","error":"ERROR: duplicate key value violates unique constraint \"uni_users_email\" (SQLSTATE 23505)"}
+{"level":"INFO","timestamp":"2025-03-30T10:22:23.430+0500","caller":"api/server.go:80","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T10:22:23.430+0500","caller":"api/server.go:65","message":"gRPC сервер запущен на :50010"}
+{"level":"ERROR","timestamp":"2025-03-30T10:22:26.780+0500","caller":"api/server.go:35","message":"Пользователь с таким email уже существует","email":"test@example.com"}
+{"level":"INFO","timestamp":"2025-03-30T10:29:26.899+0500","caller":"api/server.go:103","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T10:29:26.900+0500","caller":"api/server.go:89","message":"gRPC сервер запущен на :50010"}
+{"level":"ERROR","timestamp":"2025-03-30T23:28:47.261+0500","caller":"database/init.go:25","message":"Ошибка подключения к базе данных: "}
+{"level":"INFO","timestamp":"2025-03-30T23:28:47.263+0500","caller":"api/server.go:102","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T23:28:47.263+0500","caller":"api/server.go:88","message":"gRPC сервер запущен на :50010"}
+{"level":"ERROR","timestamp":"2025-03-30T23:30:05.412+0500","caller":"api/server.go:67","message":"Ошибка при создании пользователя","error":"failed to connect to `user=postgres database=mydb`: 127.0.0.1:5432 (localhost): dial error: dial tcp 127.0.0.1:5432: connect: connection refused"}
+{"level":"ERROR","timestamp":"2025-03-30T23:30:39.040+0500","caller":"api/server.go:52","message":"Пользователь с таким email уже существует","email":""}
+{"level":"ERROR","timestamp":"2025-03-30T23:30:47.159+0500","caller":"api/server.go:52","message":"Пользователь с таким email уже существует","email":""}
+{"level":"ERROR","timestamp":"2025-03-30T23:31:07.266+0500","caller":"api/server.go:52","message":"Пользователь с таким email уже существует","email":""}
+{"level":"ERROR","timestamp":"2025-03-30T23:34:06.373+0500","caller":"api/server.go:41","message":"Ошибка генерации токена","error":"key is of invalid type: HMAC sign expects []byte"}
+{"level":"ERROR","timestamp":"2025-03-30T23:34:22.061+0500","caller":"api/server.go:52","message":"Пользователь с таким email уже существует","email":""}
+{"level":"ERROR","timestamp":"2025-03-30T23:34:27.380+0500","caller":"api/server.go:41","message":"Ошибка генерации токена","error":"key is of invalid type: HMAC sign expects []byte"}
+{"level":"INFO","timestamp":"2025-03-30T23:35:29.280+0500","caller":"api/server.go:102","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T23:35:29.280+0500","caller":"api/server.go:88","message":"gRPC сервер запущен на :50010"}
+{"level":"INFO","timestamp":"2025-03-30T23:36:56.210+0500","caller":"api/server.go:106","message":"gRPC-Gateway запущен на :8080"}
+{"level":"INFO","timestamp":"2025-03-30T23:36:56.211+0500","caller":"api/server.go:92","message":"gRPC сервер запущен на :50010"}
+{"level":"INFO","timestamp":"2025-03-30T23:37:01.878+0500","caller":"api/server.go:34","message":"Найден пользователь","email":""}
+{"level":"INFO","timestamp":"2025-03-30T23:37:01.989+0500","caller":"api/server.go:47","message":"Токен успешно создан","token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IiIsImV4cCI6MTc0MzM2MzQyMX0.rwBzrroLFeDTOOhPcYW5xxe9vsovw448Rm6r01Wtpkk"}

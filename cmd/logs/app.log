@@ -2,3 +2,7 @@
 {"level":"FATAL","timestamp":"2025-03-29T00:38:15.896+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open /chat/.env: no such file or directory"}
 {"level":"FATAL","timestamp":"2025-03-29T00:38:36.251+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open chat/.env: no such file or directory"}
 {"level":"FATAL","timestamp":"2025-03-29T00:39:50.212+0500","caller":"conf/config.go:27","message":"Ошибка загрузки .env файла","error":"open ../../.env: no such file or directory"}
+{"level":"INFO","timestamp":"2025-03-30T23:28:10.810+0500","caller":"cmd/main.go:16","message":"started "}
+{"level":"INFO","timestamp":"2025-03-30T23:28:25.633+0500","caller":"cmd/main.go:16","message":"started "}
+{"level":"INFO","timestamp":"2025-03-30T23:35:33.031+0500","caller":"cmd/main.go:16","message":"started "}
+{"level":"INFO","timestamp":"2025-03-30T23:40:47.726+0500","caller":"cmd/main.go:18","message":"started "}

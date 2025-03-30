@@ -1,50 +1,110 @@
 package main
 
 import (
+	pb "chat/api/pb"
+	"chat/internal/auth"
+	"chat/internal/database"
+	"chat/internal/models"
+	"chat/pkg/conf"
 	"context"
-	"log"
+	"fmt"
 	"net"
 	"net/http"
 
-	pb "chat/api/github.com/yourname/grpc-gateway-example/hello"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
-type server struct {
-	pb.UnimplementedHelloServiceServer
+type Server struct {
+	pb.UnimplementedAuthServer
 }
 
-func (s *server) SayHello(ctx context.Context, req *pb.HelloRequest) (*pb.HelloResponse, error) {
-	log.Printf("Received request: %s", req.Name)
-	return &pb.HelloResponse{Message: "Hello, " + req.Name + "!"}, nil
+var logger *zap.Logger
+
+func (s *Server) Login(ctx context.Context, in *pb.LoginRequest) (*pb.LoginResponse, error) {
+	var existsUser models.User
+
+	if err := database.DB.Where("email = ?", in.GetEmail()).First(&existsUser).Error; err != nil {
+		logger.Error("Пользователь не найден", zap.Error(err))
+		return nil, fmt.Errorf("неверный email или пароль")
+	}
+
+	logger.Info("Найден пользователь", zap.String("email", existsUser.Email)) // ✅ Логируем email
+
+	if !auth.CheckPassword(existsUser.Password, in.GetPassword()) {
+		logger.Error("Неверный пароль")
+		return nil, fmt.Errorf("неверный email или пароль")
+	}
+
+	token, err := auth.GenerateJwt(existsUser.Email)
+	if err != nil {
+		logger.Error("Ошибка генерации токена", zap.Error(err))
+		return nil, err
+	}
+
+	logger.Info("Токен успешно создан", zap.String("token", token)) // ✅ Логируем токен
+
+	return &pb.LoginResponse{Token: token}, nil
+}
+
+func (s *Server) Register(ctx context.Context, in *pb.RegisterRequest) (*pb.ReqisterResponse, error) {
+	var existingUser models.User
+
+	if err := database.DB.Where("email = ?", in.GetEmail()).First(&existingUser).Error; err == nil {
+		logger.Error("Пользователь с таким email уже существует", zap.String("email", in.GetEmail()))
+		return &pb.ReqisterResponse{Succes: false}, fmt.Errorf("пользователь уже зарегистрирован")
+	}
+
+	hashedPassword, err := auth.HashPassword(in.GetPassword())
+	if err != nil {
+		logger.Error("Ошибка хеширования пароля", zap.Error(err))
+		return &pb.ReqisterResponse{Succes: false}, err
+	}
+
+	newUser := models.User{
+		Email:    in.GetEmail(),
+		Password: hashedPassword,
+	}
+	if err := database.DB.Create(&newUser).Error; err != nil {
+		logger.Error("Ошибка при создании пользователя", zap.Error(err))
+		return &pb.ReqisterResponse{Succes: false}, err
+	}
+
+	return &pb.ReqisterResponse{Succes: true}, nil
 }
 
 func main() {
+	logger = conf.InitLogger()
+	database.InitDB()
+	database.DB.AutoMigrate(&models.User{}, &models.Comment{}, &models.Like{}, &models.Group{}, &models.Post{}, &models.Like{})
 	go func() {
-		lis, err := net.Listen("tcp", ":50051")
+		listener, err := net.Listen("tcp", ":50010")
 		if err != nil {
-			log.Fatalf("Failed to listen: %v", err)
+			logger.Fatal("Ошибка запуска gRPC: " + err.Error())
 		}
+		defer listener.Close()
 
-		s := grpc.NewServer()
-		pb.RegisterHelloServiceServer(s, &server{})
+		server := grpc.NewServer()
+		pb.RegisterAuthServer(server, &Server{})
 
-		log.Println("gRPC server listening on :50051")
-		if err := s.Serve(lis); err != nil {
-			log.Fatalf("Failed to serve: %v", err)
+		logger.Info("gRPC сервер запущен на :50010")
+		if err := server.Serve(listener); err != nil {
+			logger.Fatal("Ошибка работы gRPC: " + err.Error())
 		}
 	}()
 
 	mux := runtime.NewServeMux()
 	ctx := context.Background()
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	opts := []grpc.DialOption{grpc.WithInsecure()}
-	err := pb.RegisterHelloServiceHandlerFromEndpoint(ctx, mux, "localhost:50051", opts)
-	if err != nil {
-		log.Fatalf("Failed to start HTTP Gateway: %v", err)
+	if err := pb.RegisterAuthHandlerFromEndpoint(ctx, mux, "localhost:50010", opts); err != nil {
+		logger.Fatal("Ошибка запуска gRPC-Gateway", zap.Error(err))
 	}
 
-	log.Println("HTTP-gRPC Gateway listening on :8080")
-	http.ListenAndServe(":8080", mux)
+	logger.Info("gRPC-Gateway запущен на :8080")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		logger.Fatal("Ошибка запуска HTTP сервера", zap.Error(err))
+	}
 }
